@@ -22,12 +22,24 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2 
+      
       - uses: Jimver/cuda-toolkit@v0.2.5
         id: cuda-toolkit
         with:
           cuda: '11.5.1'
-      - name: Run a multi-line script
+      - name: Check CUDA version !
         run: |
           echo "Installed cuda version is: ${{steps.cuda-toolkit.outputs.cuda}}"
           echo "Cuda install location: ${{steps.cuda-toolkit.outputs.CUDA_PATH}}"
           nvcc -V
+      - name: Complie CUDA program 
+        run: |
+          cd $GITHUB_WORKSPACE
+          echo "test compile helloworld.cu"
+          nvcc  -o  test  helloworld.cu
+          ./test
+
+          
+
